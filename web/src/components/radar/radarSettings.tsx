@@ -1,0 +1,85 @@
+import { Component } from "solid-js"
+import { Slider, SliderFill, SliderThumb, SliderTrack } from "../ui/slider"
+import { radarState, setRadarState, settingsType } from "../../store/radar"
+import { post } from "@/misc"
+const RadarSettings: Component = () => {
+    const handleChange = (key: keyof settingsType, value: number[]) => {
+        setRadarState('settings', key, value)
+    }
+
+    const saveState = () => {
+        post('radar:saveState', radarState.settings)
+        post('radar:closeMenu')
+        setRadarState('menu', false)
+    }
+
+    const resetState = () => {
+        post('radar:resetState', undefined, (data: settingsType) => {
+            setRadarState('settings', data)
+        })
+    }
+
+    return <div class="select-none absolute text-white p-8 right-0 left-0 top-0 bottom-0 m-auto h-fit w-[35vh] bg-neutral-900 rounded">
+        <p class="text-white font-semibold text-xl pb-2">Radar inställningar</p>
+        <p class="text-sm pb-3 font-semibold text-neutral-400">
+            Justera hastighet och position
+        </p>
+        <div class="w-full h-[1px] bg-yellow-500">
+
+        </div>
+        <div class="py-5">
+            <div class="text-base flex font-semibold pb-3">
+                <p>Storlek</p>
+                <div class="flex-grow" />
+                <p class="text-neutral-400">{ Math.floor(radarState.settings.scale[0]*100) }%</p>
+            </div>
+            <Slider
+                value={radarState.settings.scale} 
+                onChange={(value: number[]) => {
+                    handleChange('scale', value)
+                }}
+                minValue={0.25}
+                maxValue={2}
+                step={0.05}
+            >
+                <SliderTrack class="h-3 bg-neutral-800">
+                    <SliderFill class="h-3 bg-white"/>
+                    <SliderThumb class="h-7 w-7" />
+                </SliderTrack>
+            </Slider>
+            <div class="text-base flex font-semibold pt-3">
+                <p class="text-neutral-400">Liten</p>
+                <div class="flex-grow" />
+                <p class="text-neutral-400">Stor</p>
+            </div>
+        </div>
+        <div class="pb-5 pt-3">
+            <div class="text-base flex font-semibold pb-3">
+                <p>Hastighets varning</p>
+                <div class="flex-grow" />
+                <p class="text-neutral-400">200 km/h</p>
+            </div>
+            <Slider>
+                <SliderTrack class="h-3 bg-neutral-800">
+                    <SliderFill class="h-3 bg-white"/>
+                    <SliderThumb class="h-7 w-7" />
+                </SliderTrack>
+            </Slider>
+            <div class="text-base flex font-semibold pt-3">
+                <p class="text-neutral-400">0</p>
+                <div class="flex-grow" />
+                <p class="text-neutral-400">220</p>
+            </div>
+        </div>
+        <div class="flex gap-2 pt-4">
+            <button onClick={resetState} class="bg-neutral-700 text-white text-sm font-bold rounded px-5 py-3">
+                ÅTERSTÄLL
+            </button>
+            <button onClick={saveState} class="bg-neutral-300 w-full text-black text-sm font-bold rounded px-5 py-3">
+                SPARA
+            </button>
+        </div>
+    </div>
+}
+
+export default RadarSettings
