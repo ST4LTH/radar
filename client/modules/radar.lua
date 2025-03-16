@@ -68,12 +68,18 @@ local radar = function ()
         if vehicle then
             local front = getVehicleInDirection('front')
             if front ~= nil then
-                lastFront = getVehicleData(front)
+                local frontData = getVehicleData(front)
+                if frontData then
+                    lastFront = frontData
+                end
             end
 
             local back = getVehicleInDirection('back')
             if back ~= nil then
-                lastBack = getVehicleData(back)
+                local backData = getVehicleData(back)
+                if backData then
+                    lastBack = backData
+                end
             end
 
             if (front or back) then
