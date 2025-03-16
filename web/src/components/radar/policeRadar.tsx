@@ -75,7 +75,7 @@ const PoliceRadar: Component = () => {
                 class="relative overflow-hidden rounded-sm bg-black h-[5.5vh] w-full"
                 style={{
                     'background': state().speedAlarm[0] > 0 ? (
-                        state().speedAlarm[0] > (radarState.front?.speed || 0) ? '#ff000036' : ''
+                        state().speedAlarm[0] < (radarState.front?.speed || 0) ? '#ff000036' : ''
                     ) : ''
                 }}
             >
@@ -108,7 +108,14 @@ const PoliceRadar: Component = () => {
                     <p class="absolute right-0 left-0 top-0 bottom-0 m-auto w-fit h-fit font-bold text-xl text-yellow-500">REG</p>
                 </div>
             }
-            <div class="relative overflow-hidden rounded-sm bg-black h-[5.5vh] w-full">
+            <div 
+                class="relative overflow-hidden rounded-sm bg-black h-[5.5vh] w-full"
+                style={{
+                    'background': state().speedAlarm[0] > 0 ? (
+                        state().speedAlarm[0] < (radarState.back?.speed || 0) ? '#ff000036' : ''
+                    ) : ''
+                }}
+            >
                 <p class="bg-neutral-800 text-xs py-0.5 text-center">Hastighet</p>
                 <p class="text-xl pt-2 font-bold text-center">
                     { Math.floor(radarState.back?.speed || 0) }

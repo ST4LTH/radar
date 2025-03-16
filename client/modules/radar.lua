@@ -105,6 +105,12 @@ local toggleRadar = function (toggle)
     end
 end
 
+RegisterNetEvent('radar:setVehicleWanted', function(plate, toggle)
+    if vehicleCache[plate] then
+        vehicleCache[plate].wanted = toggle
+    end
+end)
+
 RegisterNuiCallback('radar:saveState', function (data, cb)
     setKvp('radarSettings', data)
 
@@ -129,10 +135,9 @@ RegisterNuiCallback('radar:closeMenu', function (data, cb)
     cb({})
 end)
 
-
 RegisterCommand('radarConfig', function ()
     toggleSettings(true)
-end, false)
+end, false) RegisterKeyMapping('radarConfig', 'Radar: Inställningar', 'keyboard', 'F6')
 
 RegisterCommand('radar', function ()
     toggleRadar(not open)
@@ -144,4 +149,15 @@ RegisterCommand('radar', function ()
             data = getDecodedKvp('radarSettings')
         })
     end
-end, false)
+end, false) RegisterKeyMapping('radar', 'Radar: Toggle', 'keyboard', 'F5')
+
+RegisterCommand('radarSelect', function ()
+    local front = getVehicleInDirection('front')
+    if not front then return end
+
+    local plate = GetVehicleNumberPlateText(front)
+    if not vehicleCache[plate] then return end
+
+    vehicleCache[plate].wanted = not vehicleCache[plate].wanted
+    lib.callback('radar:toggleVehicleWanted', false, function() end, plate, vehicleCache[plate].wanted)
+end, false) RegisterKeyMapping('radarSelect', 'Radar: Markera fordon', 'keyboard', 'F4')
