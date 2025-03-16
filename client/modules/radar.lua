@@ -39,9 +39,31 @@ local getVehicleData = function (vehicle)
 end
 
 local radar = function ()
-    while open do 
+    local visible = false
+
+    while open do
+        local waitThread = 200
         local playerPed = PlayerPedId()
         local vehicle = GetVehiclePedIsIn(playerPed, false)
+
+        if vehicle == 0 and visible then
+            visible = false
+            SendNUIMessage({
+                type = 'radar:toggleRadar',
+                data = false
+            })
+        elseif vehicle ~= 0 and not visible then
+            visible = true
+            SendNUIMessage({
+                type = 'radar:toggleRadar',
+                data = true
+            })
+        end
+
+        if not visible then
+            waitThread = 1000
+            goto continue
+        end
 
         if vehicle then
             local front = getVehicleInDirection('front')
@@ -65,7 +87,9 @@ local radar = function ()
             end
         end
 
-        Wait(200)
+        ::continue::
+
+        Wait(waitThread)
     end
 end
 
@@ -143,7 +167,6 @@ RegisterCommand('radar', function ()
     toggleRadar(not open)
 
     if open then
-        Wait(100)
         SendNUIMessage({
             type = 'radar:setSettings',
             data = getDecodedKvp('radarSettings')
