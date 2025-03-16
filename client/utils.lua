@@ -19,7 +19,7 @@ getVehicleInDirection = function(direction)
         local rayHandle = StartShapeTestRay(coords.x, coords.y, coords.z+heightOffset, offset.x, offset.y, offset.z+heightOffset, 10, vehicle, 0)
         local _, hit, _, _, detectedVehicle = GetShapeTestResult(rayHandle)
 
-        DrawLine(coords.x, coords.y, coords.z+heightOffset, offset.x, offset.y, offset.z+heightOffset, 255, 255, 255, 255)
+--[[         DrawLine(coords.x, coords.y, coords.z+heightOffset, offset.x, offset.y, offset.z+heightOffset, 255, 255, 255, 255) ]]
     
         if hit == 1 and IsEntityAVehicle(detectedVehicle) then
             return detectedVehicle

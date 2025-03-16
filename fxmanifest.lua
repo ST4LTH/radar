@@ -21,10 +21,10 @@ shared_scripts {
     '@ox_lib/init.lua'
 }
 
---ui_page 'web/dist/index.html'
-ui_page 'http://localhost:5173/' -- Dev
+ui_page 'web/build/index.html'
+--ui_page 'http://localhost:5173/' -- Dev
 
 files {
-    'web/dist/index.html',
-    'web/dist/**/*',
+    'web/build/index.html',
+    'web/build/**/*',
 }

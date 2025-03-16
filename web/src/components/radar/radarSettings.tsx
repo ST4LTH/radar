@@ -27,7 +27,7 @@ const RadarSettings: Component = () => {
         <div class="w-full h-[1px] bg-yellow-500">
 
         </div>
-        <div class="py-5">
+        <div class="px-2 py-5">
             <div class="text-base flex font-semibold pb-3">
                 <p>Storlek</p>
                 <div class="flex-grow" />
@@ -53,13 +53,21 @@ const RadarSettings: Component = () => {
                 <p class="text-neutral-400">Stor</p>
             </div>
         </div>
-        <div class="pb-5 pt-3">
+        <div class="pb-5 px-2 pt-3">
             <div class="text-base flex font-semibold pb-3">
                 <p>Hastighets varning</p>
                 <div class="flex-grow" />
-                <p class="text-neutral-400">200 km/h</p>
+                <p class="text-neutral-400">{ Math.floor(radarState.settings.speedAlarm[0]) } km/h</p>
             </div>
-            <Slider>
+            <Slider
+                value={radarState.settings.speedAlarm} 
+                onChange={(value: number[]) => {
+                    handleChange('speedAlarm', value)
+                }}
+                minValue={0}
+                maxValue={220}    // Changed from 5 to 220
+                step={1}
+            >
                 <SliderTrack class="h-3 bg-neutral-800">
                     <SliderFill class="h-3 bg-white"/>
                     <SliderThumb class="h-7 w-7" />

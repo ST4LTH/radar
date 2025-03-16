@@ -51,10 +51,10 @@ const PoliceRadar: Component = () => {
 
     return <div 
         onMouseDown={handleMouseDown}
-        class="select-none absolute font-semibold flex flex-col p-6 pt-5 bg-neutral-950 text-white w-[45vh] h-[20vh] rounded"
+        class="select-none absolute font-semibold cursor-grab flex flex-col p-6 pt-5 bg-neutral-950 text-white w-[45vh] h-[20vh] rounded"
         style={{
-            top: `${state().coords[1]}px`,
-            left: `${state().coords[0]}px`,
+            bottom: `${-state().coords[1]}px`,
+            right: `${-state().coords[0]}px`,
             transform: `scale(${state().scale[0]})`,
         }}
     >
@@ -71,9 +71,18 @@ const PoliceRadar: Component = () => {
             </div>
         </div>
         <div class="grid grid-cols-[1fr_1.2fr_1fr_1.2fr] gap-3 w-full mb-3">
-            <div class="relative overflow-hidden rounded-sm bg-black h-[5.5vh] w-full">
+            <div 
+                class="relative overflow-hidden rounded-sm bg-black h-[5.5vh] w-full"
+                style={{
+                    'background': state().speedAlarm[0] > 0 ? (
+                        state().speedAlarm[0] > (radarState.front?.speed || 0) ? '#ff000036' : ''
+                    ) : ''
+                }}
+            >
                 <p class="bg-neutral-800 text-xs py-0.5 text-center">Hastighet</p>
-                <p class="text-xl pt-2 font-bold text-center">
+                <p 
+                    class="text-xl pt-2 font-bold text-center"
+                >
                     { Math.floor(radarState.front?.speed || 0) }
                 </p>
                 <p class="text-[0.7vh] text-neutral-400 absolute right-2 bottom-1">
@@ -86,7 +95,7 @@ const PoliceRadar: Component = () => {
                     style={{ 'background-image': `url(images/plates/${radarState.front?.plateId}.png)` }}
                     class="rounded bg-center bg-cover h-[5.5vh] w-full"
                 >
-                    <p class="text-xl pt-8 text-neutral-800 font-bold text-center">
+                    <p class={cn("text-xl pt-8 text-neutral-800 font-bold text-center", (radarState.front?.plateId == 1 || radarState.front?.plateId == 2) ? 'text-white' : 'text-black')}>
                         { radarState.front?.plate }
                     </p>
                 </div>
@@ -114,7 +123,7 @@ const PoliceRadar: Component = () => {
                     style={{ 'background-image': `url(images/plates/${radarState.back?.plateId}.png)` }}
                     class="rounded bg-center bg-cover h-[5.5vh] w-full"
                 >
-                    <p class="text-xl pt-8 text-neutral-800 font-bold text-center">
+                    <p class={cn("text-xl pt-8 text-neutral-800 font-bold text-center", (radarState.back?.plateId == 1 || radarState.back?.plateId == 2) ? 'text-white' : 'text-black')}>
                         { radarState.back?.plate }
                     </p>
                 </div>

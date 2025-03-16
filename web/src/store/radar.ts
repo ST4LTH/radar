@@ -26,16 +26,29 @@ export type vehicleType = {
 export type settingsType = {
     coords: number[];
     scale: number[];
+    speedAlarm: number[];
 }
 
 const [radarState, setRadarState] = createStore<radarState>({
-    open: true,
+    open: false,
     menu: false,
     settings: {
         coords: [0,0],
-        scale: [1.0]
+        scale: [1.0],
+        speedAlarm: [0.0]
     },
-    front: null,
+    front: null/* {
+        speed: 20,
+        plateId: 1,
+        plate: 'ABC 123',
+        vehicle: {
+            owner: 'John Doe',
+            ownerWanted: false,
+            maxSpeed: 100,
+            wanted: false,
+            model: 'Sentinel'
+        },
+    } */,
     back: null,
 })
 

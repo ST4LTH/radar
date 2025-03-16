@@ -9,11 +9,12 @@ local getVehicleData = function (vehicle)
     local speed = GetEntitySpeed(vehicle) * 3.6
 
     if not vehicleCache[plate] then
-        lib.callback('radar:getVehicleData', false, function(data)
-            print('data recieved')
+        print(plate)
+        local data = lib.callback.await('radar:getVehicleData', false, plate)
+        if data then
+            print('data received')
             vehicleCache[plate] = data
-        end, plate)
-        return nil
+        end
     end
 
     if vehicleCache[plate].maxSpeed and speed > vehicleCache[plate].maxSpeed then
@@ -113,7 +114,8 @@ end)
 RegisterNuiCallback('radar:resetState', function (_, cb)
     local data = {
         coords = {0,0},
-        scale = 1.0
+        scale = {1.0},
+        speedAlarm = {0.0}
     }
 
     setKvp('radarSettings', data)
@@ -136,6 +138,7 @@ RegisterCommand('radar', function ()
     toggleRadar(not open)
 
     if open then
+        Wait(100)
         SendNUIMessage({
             type = 'radar:setSettings',
             data = getDecodedKvp('radarSettings')
