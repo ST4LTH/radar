@@ -173,9 +173,20 @@ RegisterCommand('radar', function ()
     toggleRadar(not open)
 
     if open then
+        local data = {
+            coords = {0,0},
+            scale = {1.0},
+            speedAlarm = {0.0}
+        }
+        local kvp = getDecodedKvp('radarSettings') 
+
+        if kvp then
+            data = kvp
+        end
+            
         SendNUIMessage({
             type = 'radar:setSettings',
-            data = getDecodedKvp('radarSettings')
+            data = data
         })
     end
 end, false) RegisterKeyMapping('radar', 'Radar: Toggle', 'keyboard', 'F5')
